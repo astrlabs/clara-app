@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# Secrets / credentials (do not commit)
+.streamlit/secrets.toml
+firebase_key.json
+clara_memory_db/

@@ -1,0 +1,15 @@
+[theme]
+# Primary background for the entire app. Dark, but not pure black.
+backgroundColor = "#121212"
+
+# Secondary background for chat bubbles, sidebar, and containers.
+secondaryBackgroundColor = "#1E1E1E"
+
+# Vibrant electric teal for primary actions and accents.
+primaryColor = "#03DAC6"
+
+# Soft gray/off-white for highly readable body text.
+textColor = "#E0E0E0"
+
+# Keep the existing monospace aesthetic unless you want to change it.
+font = "monospace"
