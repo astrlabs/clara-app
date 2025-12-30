@@ -8,3 +8,4 @@ __pycache__/
 .streamlit/secrets.toml
 firebase_key.json
 clara_memory_db/
+clara-companion-fe6a8-firebase-adminsdk-fbsvc-fca8258bfb.json
