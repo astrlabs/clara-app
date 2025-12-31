@@ -193,6 +193,15 @@ if st.session_state.username is None:
             st.session_state.display_name = None
             st.rerun()
 
+    # --- SYSTEM STATUS ---
+    st.write("")
+    st.write("")
+    is_init, app_name = storage.is_initialized()
+    if is_init:
+        st.caption(f"Status: ✅ System Online")
+    else:
+        st.caption("Status: ❌ System Offline (Auth Error)")
+
     components.render_footer()
 
 # --- VIEW C: THE CHAT INTERFACE ---
