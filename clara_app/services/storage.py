@@ -28,6 +28,13 @@ def get_db():
 def initialize_firebase():
     return get_db()
 
+def is_initialized():
+    try:
+        app = firebase_admin.get_app()
+        return True, app.name
+    except ValueError:
+        return False, None
+
 # --- DB Helpers ---
 
 def _get_chat_doc(username):
