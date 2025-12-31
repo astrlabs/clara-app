@@ -8,11 +8,11 @@ def render_chat_message(role, content):
     if role == "assistant":
         label = "Clara"
         label_class = "clara-label"
-        avatar = "Clara Avatars/Simple Avatar/clara_avatar_helmet.jpeg"
+        avatar = "Clara Avatars/Simple Avatar/clara_avatar_aster.jpeg"
     else:
         label = st.session_state.get("display_name") or "You"
         label_class = "user-label"
-        avatar = "Clara Avatars/Simple Avatar/user_avatar_helmet.jpeg"
+        avatar = "Clara Avatars/Simple Avatar/user_avatar_helmet_v2.jpeg"
 
     if RETRO_UI:
         safe_text = html.escape(content).replace("\n", "<br/>")
@@ -38,7 +38,7 @@ def render_footer():
     st.markdown(
         """
         <div class="footer-text">
-            Clara Aster™ is a trademark of ASTR, LLC. © 2025 ASTR, LLC.
+            Clara Aster™ is a trademark of ASTR Labs, LLC. © 2025 ASTR Labs, LLC.
         </div>
         """,
         unsafe_allow_html=True,
@@ -118,7 +118,7 @@ def render_privacy_policy_page():
         ---
 
         ### 5. Contact Us
-        *   **Privacy Inquiries:** For questions regarding your data, please contact **privacy@claraaster.com**
+        *   **Privacy Inquiries:** For questions regarding your data, please contact **privacy@astrlabs.com**
 
         ---
 
@@ -212,7 +212,7 @@ def render_sidebar():
             st.markdown("---")
 
             # Feedback
-            st.info("Have feedback? Email us at **feedback@claraaster.com**")
+            st.info("Have feedback? Email us at **feedback@astrlabs.com**")
 
             st.markdown("---")
             if st.button("Manage Account & Data", use_container_width=True):
@@ -258,7 +258,7 @@ def render_sidebar():
         #         st.bar_chart(data)
 
         # Standard Footer
-        st.sidebar.caption("Clara Aster™ is a trademark of ASTR, LLC. © 2025 ASTR, LLC.")
+        st.sidebar.caption("Clara Aster™ is a trademark of ASTR Labs, LLC. © 2025 ASTR Labs, LLC.")
 
 def render_account_page():
     st.markdown("## Account & Data Management")
