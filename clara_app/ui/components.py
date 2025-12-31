@@ -86,7 +86,7 @@ def render_privacy_policy_page():
     st.title("Privacy Policy")
     st.markdown(
         """
-        At **Clara Aster**, we prioritize your privacy and trust. This policy outlines what data we collect, why we use it, and how you can control it.
+        At **Clara Aster** (and **ASTR Labs**), we prioritize your privacy and trust. This policy outlines what data we collect, why we use it, and how you can control it.
 
         ### 1. Information We Collect
         We collect data to provide the service and improve your experience.
@@ -119,8 +119,6 @@ def render_privacy_policy_page():
 
         ### 5. Contact Us
         *   **Privacy Inquiries:** For questions regarding your data, please contact **privacy@astrlabs.com**
-
-        ---
 
 
         ---
@@ -250,12 +248,12 @@ def render_account_page():
     st.markdown("---")
 
     # 1. Clear Chat
-    st.subheader("1. Clear Chat (The Blank Page)")
+    st.subheader("1. Clear Chat (Fresh Context)")
     st.markdown(
         """
-        - **What it does:** Wipes your current conversation window and Clara's "short-term" memory of the discussion.
+        - **What it does:** Wipes the active conversation window. Clara forgets the immediate discussion but retains her general understanding of you.
         - **Best for:** Starting a new topic without Clara being influenced by the previous conversation context.
-        - **Data Status:** Old messages are effectively hidden/archived (marked with a timestamp), but Clara's *Summary* of who you are and what you talked about in that session is erased.
+        - **Data Status:** Old messages are effectively hidden/archived (marked with a timestamp), but Clara's *Summary* of who you are (profile notes) persists.
         """
     )
     if st.button("Clear Chat", type="secondary"):
@@ -268,12 +266,12 @@ def render_account_page():
     st.markdown("---")
 
     # 2. Account Reset
-    st.subheader("2. Account Reset (Factory Reset)")
+    st.subheader("2. Account Reset (The Reboot)")
     st.markdown(
         """
-        - **What it does:** Wipes all personalization, including your chosen name, profile notes, city/timezone, and *all* chat history.
+        - **What it does:** Reboots your profile to Day 1. You keep your login, but Clara forgets your name, notes, and all history.
         - **Best for:** When you want to start fresh as a "new user" but keep your existing login credentials.
-        - **Data Status:** Permanently deletes your profile data and conversation logs. You return to "Day 1" of the experience.
+        - **Data Status:** Permanently deletes your profile data and conversation logs. It's a fresh start.
         """
     )
     
@@ -303,7 +301,7 @@ def render_account_page():
         """
         - **What it does:** The nuclear option. It removes everything associated with you from the system.
         - **Best for:** Permanently leaving the platform.
-        - **Data Status:** Deletes your profile, all history, usage stats, and your authentication record. If you wanted to return, you would have to create a completely new account.
+        - **Data Status:** Permanently deletes your login and all data. You will cease to exist in our system. This is final.
         """
     )
 
