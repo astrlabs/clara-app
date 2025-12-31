@@ -170,28 +170,12 @@ def render_sidebar():
     # --- Sidebar: Profile, Settings, Info, Danger Zone ---
     with st.sidebar:
         st.sidebar.title("Clara")
-        # 1. Profile at the top
-        with st.expander("Profile", expanded=False):
-            # Read-only view
-            note = storage.get_user_profile_note(st.session_state.username)
-            tz = storage.get_user_timezone(st.session_state.username)
-            
-            if note:
-                st.caption("About You")
-                st.info(note)
-            else:
-                st.info("Tell Clara about yourself...")
-
-            if tz:
-                st.caption("Location")
-                st.markdown(f"**{tz}**")
-            
-            st.write("") # Spacer
-            if st.button("Edit Profile", use_container_width=True):
-                edit_profile_dialog()
 
         # 2. Settings
         with st.expander("Settings", expanded=False):
+            if st.button("Edit Profile", use_container_width=True):
+                edit_profile_dialog()
+            
             if st.button("Clear Chat", type="secondary"):
                 st.session_state.messages = []
                 storage.clear_chat_history(st.session_state.username)
