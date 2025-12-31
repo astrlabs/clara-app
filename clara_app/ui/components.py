@@ -205,6 +205,7 @@ def render_sidebar():
 
         # 3. Privacy & Terms
         with st.expander("Privacy & Terms"):
+            st.markdown(
                 """
                 **For Your Safety**
 
