@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import random
 
-from clara_app.constants import FREE_DAILY_MESSAGE_LIMIT, PLUS_DAILY_MESSAGE_LIMIT, BETA_ACCESS_KEY, FIREBASE_WEB_API_KEY
+from clara_app.constants import FREE_DAILY_MESSAGE_LIMIT, PLUS_DAILY_MESSAGE_LIMIT, BETA_ACCESS_KEY, FIREBASE_WEB_API_KEY, MASTER_EMAILS, MASTER_DOMAINS
 from clara_app.services import storage, llm, memory, auth
 from clara_app.utils import helpers
 from clara_app.ui import styles, components
@@ -31,20 +31,40 @@ if "display_name" not in st.session_state:
     st.session_state.display_name = None
 if "beta_authenticated" not in st.session_state:
     st.session_state.beta_authenticated = False
+if "access_code" not in st.session_state:
+    st.session_state.access_code = None
+if "show_login_anyway" not in st.session_state:
+    st.session_state.show_login_anyway = False
 
-# --- 1.1. BETA ACCESS GATE ---
-if not st.session_state.beta_authenticated:
+# Bypass gate if:
+# 1. Already "Beta Authenticated" (entered a valid key this session)
+# 2. Already logged in (Existing user)
+# 3. Explicitly clicked "Log In" to reach the auth screen
+# 4. Is a master email/domain
+if not st.session_state.beta_authenticated and st.session_state.username is None and not st.session_state.show_login_anyway:
+    if helpers.is_master_email(st.session_state.user_email):
+        st.session_state.beta_authenticated = True
+        st.rerun()
+
     st.title("Clara Aster™")
     with st.form("beta_gate_form"):
         key_input = st.text_input("Enter Early Access Key", type="password")
         submit_key = st.form_submit_button("Enter")
     
     if submit_key:
-        if key_input == BETA_ACCESS_KEY:
+        status = storage.validate_access_code(key_input)
+        if status["valid"]:
             st.session_state.beta_authenticated = True
+            st.session_state.access_code = key_input
             st.rerun()
         else:
-            st.error("Invalid Key.")
+            st.error("Invalid Entry Key.")
+    
+    # Allow existing master/staff to reach login screen
+    if st.button("Log In (Existing Users)"):
+        st.session_state.show_login_anyway = True
+        st.rerun()
+        
     st.stop()
 
 # --- 1.5. PAGE ROUTING (Legal Content) ---
@@ -91,6 +111,10 @@ if st.session_state.username is None:
                         st.session_state.user_email = user_email
                         st.session_state.user_id = uid  # usage doc id
                         
+                        # Claim access code if it's a unique one
+                        if st.session_state.access_code:
+                            storage.claim_access_code(st.session_state.access_code, uid)
+                        
                         # Core identity setup
                         storage.ensure_user_identity(uid, user_email)
                         
@@ -136,7 +160,16 @@ if st.session_state.username is None:
                 submit_signup = st.form_submit_button("Create Account")
             
             if submit_signup:
-                if not new_email or not new_pass:
+                # Re-validate the code for signup (unless it's a master email/domain or developer key)
+                is_master = helpers.is_master_email(new_email)
+                status = storage.validate_access_code(st.session_state.access_code)
+                is_dev_key = status.get("developer", False)
+                
+                if not is_master and not is_dev_key and not status["valid"]:
+                     st.error("Access session expired? Please refresh and re-enter your key.")
+                elif not is_master and not is_dev_key and status["used"]:
+                     st.error("This Access Key has already been used to create an account. If that was you, please Log In instead.")
+                elif not new_email or not new_pass:
                     st.error("Please fill in all fields.")
                 elif new_pass != confirm_pass:
                     st.error("Passwords do not match.")
@@ -154,6 +187,11 @@ if st.session_state.username is None:
                         if not err:
                             st.session_state.user_email = user_email
                             st.session_state.user_id = uid
+                            
+                            # Claim access code if it's a unique one
+                            if st.session_state.access_code:
+                                storage.claim_access_code(st.session_state.access_code, uid)
+                                
                             storage.ensure_user_identity(uid, user_email)
                             st.session_state.username = uid
                             st.session_state.display_name = None

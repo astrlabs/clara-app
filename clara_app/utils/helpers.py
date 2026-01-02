@@ -9,6 +9,25 @@ def normalize_email(email: str) -> str:
         return ""
     return email.strip().lower()
 
+def is_master_email(email: str) -> bool:
+    """Check if the given email belongs to a master/developer account."""
+    from clara_app.constants import MASTER_EMAILS, MASTER_DOMAINS
+    norm = normalize_email(email)
+    if not norm:
+        return False
+    
+    # Check specific emails
+    if norm in [e.lower() for e in MASTER_EMAILS]:
+        return True
+    
+    # Check domain suffixes
+    if "@" in norm:
+        domain = norm.split("@")[-1]
+        if domain in [d.lower() for d in MASTER_DOMAINS]:
+            return True
+            
+    return False
+
 def email_to_user_id(email: str) -> str:
     """
     Derive a stable user id from an email login key.

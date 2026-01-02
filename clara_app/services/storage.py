@@ -24,6 +24,70 @@ def get_db():
     except Exception:
         return None
 
+# --- Access Key Management ---
+
+def validate_access_code(code: str) -> dict:
+    """
+    Check if a code is valid and return its status.
+    Returns a dict with:
+    - 'valid': bool (Matches master or exists in DB)
+    - 'master': bool (Is the master key)
+    - 'used': bool (Has been claimed already)
+    - 'developer': bool (Is the developer bypass key)
+    """
+    from clara_app.constants import BETA_ACCESS_KEY, DEVELOPER_KEY
+    res = {"valid": False, "master": False, "used": False, "developer": False}
+    
+    if not code:
+        return res
+    
+    if code == DEVELOPER_KEY:
+        res["valid"] = True
+        res["master"] = True
+        res["developer"] = True
+        return res
+    
+    if code == BETA_ACCESS_KEY:
+        res["valid"] = True
+        res["master"] = True
+        return res
+    
+    db = get_db()
+    if db is None:
+        return res
+        
+    try:
+        doc = db.collection("beta_keys").document(code).get()
+        if doc.exists:
+            res["valid"] = True
+            data = doc.to_dict() or {}
+            res["used"] = data.get("used", False)
+    except Exception:
+        pass
+        
+    return res
+
+def claim_access_code(code: str, user_id: str):
+    """
+    Mark a code as used by a specific user.
+    """
+    from clara_app.constants import BETA_ACCESS_KEY, DEVELOPER_KEY
+    if not code or code == BETA_ACCESS_KEY or code == DEVELOPER_KEY:
+        return
+        
+    db = get_db()
+    if db is None:
+        return
+        
+    try:
+        db.collection("beta_keys").document(code).set({
+            "used": True,
+            "usedBy": user_id,
+            "usedAt": firestore.SERVER_TIMESTAMP
+        }, merge=True)
+    except Exception:
+        pass
+
 # initialize_firebase is deprecated in favor of cached get_db, but kept for compatibility if needed elsewhere
 def initialize_firebase():
     return get_db()

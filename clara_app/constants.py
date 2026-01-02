@@ -97,5 +97,8 @@ FIREBASE_SERVICE_ACCOUNT = st.secrets.get("FIREBASE_SERVICE_ACCOUNT")
 FIREBASE_CREDENTIALS_PATH = st.secrets.get("FIREBASE_CREDENTIALS_PATH", "clara-companion-fe6a8-firebase-adminsdk-fbsvc-fca8258bfb.json")
 FIREBASE_WEB_API_KEY = st.secrets.get("FIREBASE_WEB_API_KEY") or os.environ.get("FIREBASE_WEB_API_KEY")
 BETA_ACCESS_KEY = st.secrets.get("BETA_ACCESS_KEY") or os.environ.get("BETA_ACCESS_KEY") or "VESPER" # Fallback for dev, but overridable
+MASTER_EMAILS = ["maxttocs@gmail.com"]
+MASTER_DOMAINS = ["astrlabs.com"] # Add any other domains you want to have automatic "Master" access
+DEVELOPER_KEY = st.secrets.get("DEVELOPER_KEY") or "CLARA_DEV_2026" # Secret key for your personal bypass
 PINECONE_API_KEY = st.secrets.get("PINECONE_API_KEY") or os.environ.get("PINECONE_API_KEY")
 
